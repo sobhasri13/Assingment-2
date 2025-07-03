@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUSIC</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #fff;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background-color: #000;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .sidebar .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1db954;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .sidebar ul li a {
+            color: #b3b3b3;
+            text-decoration: none;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar ul li a:hover {
+            color: #fff;
+        }
+
+        .sidebar ul li a.active {
+            color: #1db954;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            background: linear-gradient(180deg, #1f1f1f, #121212);
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+        }
+
+        .search-bar {
+            background-color: #2a2a2a;
+            border-radius: 20px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-bar input {
+            background: none;
+            border: none;
+            color: #fff;
+            outline: none;
+        }
+
+        .playlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .playlist-card {
+            background-color: #181818;
+            border-radius: 8px;
+            padding: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .playlist-card:hover {
+            background-color: #282828;
+        }
+
+        .playlist-card img {
+            width: 100%;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            object-fit: cover;
+            aspect-ratio: 1/1;
+        }
+
+        .playlist-card h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .playlist-card p {
+            color: #b3b3b3;
+            font-size: 14px;
+        }
+
+        /* Singers List */
+        .singers-section {
+            margin-top: 40px;
+        }
+
+        .singers-section h2 {
+            font-size: 20px;
+            margin-bottom: 24px;
+        }
+
+        .singers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 24px;
+        }
+
+        .singer-card {
+            background-color: #181818;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .singer-card:hover {
+            background-color: #282828;
+        }
+
+        .singer-card img {
+            width: 100%;
+            border-radius: 50%;
+            margin-bottom: 12px;
+            object-fit: cover;
+            aspect-ratio: 1/1;
+        }
+
+        .singer-card h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .singer-card p {
+            color: #b3b3b3;
+            font-size: 14px;
+        }
+
+        /* Playback Controls */
+        .playback-bar {
+            position: fixed;
+            bottom: 0;
+            width: calc(100% - 240px);
+            background-color: #181818;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid #282828;
+        }
+
+        .track-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 200px; /* Ensure enough space for text */
+        }
+
+        .track-info img {
+            width: 48px;
+            height: 48px; /* Ensure square image */
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        .track-info div {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .track-info h4 {
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .track-info p {
+            color: #b3b3b3;
+            font-size: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .controls button {
+            background: none;
+            border: none;
+            color: #b3b3b3;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .controls button:hover {
+            color: #1db954;
+        }
+
+        .progress-bar {
+            width: 300px;
+            height: 4px;
+            background-color: #404040;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .progress {
+            width: 60%;
+            height: 100%;
+            background-color: #1db954;
+            border-radius: 2px;
+        }
+
+        .volume {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 150px;
+        }
+
+        .volume-bar {
+            width: 100px;
+            height: 4px;
+            background-color: #404040;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .volume-progress {
+            width: 70%;
+            height: 100%;
+            background-color: #1db954;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">MUSIC</div>
+            <ul>
+                <li><a href="#" class="active"><i>🏠</i> Home</a></li>
+                <li><a href="#"><i>🔍</i> Search</a></li>
+                <li><a href="#"><i>📚</i> Your Library</a></li>
+                <li><a href="#"><i>➕</i> Create Playlist</a></li>
+                <li><a href="#"><i>❤️</i> Liked Songs</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Good Afternoon</h1>
+                <div class="search-bar">
+                    <i>🔍</i>
+                    <input type="text" placeholder="Search for songs, artists...">
+                </div>
+            </div>
+
+            <div class="playlist-grid">
+                <div class="playlist-card">
+                    <img src="https://images.unsplash.com/photo-1526925539332-aa3b66e35444" alt="Chill Hits cover">
+                    <h3>Chill Hits</h3>
+                    <p>Relax with these soothing tracks</p>
+                </div>
+                <div class="playlist-card">
+                    <img src="https://images.unsplash.com/photo-1506152983158-b4a74a01c721" alt="Pop Rising cover">
+                    <h3>Pop Rising</h3>
+                    <p>Latest pop hits</p>
+                </div>
+                <div class="playlist-card">
+                    <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819" alt="Rock Classics cover">
+                    <h3>Rock Classics</h3>
+                    <p>Timeless rock anthems</p>
+                </div>
+                <div class="playlist-card">
+                    <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc" alt="Hip Hop Vibes cover">
+                    <h3>Hip Hop Vibes</h3>
+                    <p>Best of hip hop</p>
+                </div>
+            </div>
+
+            <!-- Singers Section -->
+            <div class="singers-section">
+                <h2>Popular Artists</h2>
+                <div class="singers-grid">
+                    <div class="singer-card">
+                        <img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131" alt="Billie Eilish">
+                        <h3>Billie Eilish</h3>
+                        <p>Singer-Songwriter</p>
+                    </div>
+                    <div class="singer-card">
+                        <img src="https://images.unsplash.com/photo-1514327605112-b887c0e61c0a" alt="The Weeknd">
+                        <h3>The Weeknd</h3>
+                        <p>Pop Artist</p>
+                    </div>
+                    <div class="singer-card">
+                        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f" alt="Chris Martin">
+                        <h3>Chris Martin</h3>
+                        <p>Rock Legend</p>
+                    </div>
+                    <div class="singer-card">
+                        <img src="https://images.unsplash.com/photo-1533227268428-f9ed0900fb3b" alt="Kendrick Lamar">
+                        <h3>Kendrick Lamar</h3>
+                        <p>Hip Hop Star</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Playback Bar -->
+        <div class="playback-bar">
+            <div class="track-info">
+                <img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae" alt="Track cover for bad guy">
+                <div>
+                    <h4>bad guy</h4>
+                    <p>Billie Eilish</p>
+                </div>
+            </div>
+            <div class="controls">
+                <button>⏮</button>
+                <button>▶️</button>
+                <button>⏭</button>
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+            </div>
+            <div class="volume">
+                <i>🔊</i>
+                <div class="volume-bar">
+                    <div class="volume-progress"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
